@@ -18,14 +18,14 @@ jobs:
           python-version: "3.x"
       
       - name: Install dependencies
-        run: pip install unittest2html # Optional (if you want prettier reports)
+        run: pip install pytest pytest-html
       
       - name: Run tests and generate report
-        run: python run_tests.py
+        run: python -m pytest run_tests.py --html=test_report.html --self-contained-html
       
       - name: Upload HTML report
         uses: actions/upload-artifact@v4
         with:
           name: test-report
           path: test_report.html
-          retention-days: 5  # Optional: auto-delete after 5 days
+          retention-days: 5
