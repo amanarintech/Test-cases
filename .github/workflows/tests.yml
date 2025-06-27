@@ -1,0 +1,27 @@
+name: Run Tests and Generate Report
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+      
+      - name: Run tests and generate report
+        run: python run_tests.py
+      
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: test-report
+          path: test_report.html
