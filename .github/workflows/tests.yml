@@ -1,13 +1,12 @@
-name: Run Tests and Generate Report
+name: VectorCAST Report Generator
 
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
-  test:
+  generate-report:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,17 +14,19 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.x"
+          python-version: '3.10'
       
-      - name: Install dependencies
-        run: pip install pytest pytest-html
+      - name: Generate HTML Report
+        run: |
+          python generate_report.py
+          # For testing, print first few lines
+          head -n 20 vectorcast_report.html
       
-      - name: Run tests and generate report
-        run: python -m pytest run_tests.py --html=test_report.html --self-contained-html
-      
-      - name: Upload HTML report
-        uses: actions/upload-artifact@v4
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: test-report
-          path: test_report.html
-          retention-days: 5
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
+          publish_branch: gh-pages
+          keep_files: true
+          force_orphan: true
