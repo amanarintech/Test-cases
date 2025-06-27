@@ -16,8 +16,8 @@ jobs:
       - name: Install dependencies
         run: pip install html2text
       
-      - name: Generate HTML report
-        run: python generate_report.py
+      # - name: Generate HTML report
+      #   run: python generate_report.py
       
       - name: Convert to Markdown
         run: python html_to_md.py
